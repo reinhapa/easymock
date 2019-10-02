@@ -19,6 +19,7 @@ import org.easymock.internal.*;
 import org.easymock.internal.matchers.*;
 
 import java.util.Comparator;
+import java.util.function.Consumer;
 
 /**
  * Main EasyMock class. Contains methods to create, replay and verify mocks and
@@ -1818,6 +1819,22 @@ public class EasyMock {
     public static <T> T cmp(T value, Comparator<? super T> comparator, LogicalOperator operator) {
         reportMatcher(new Compare<>(value, comparator, operator));
         return value;
+    }
+
+    /**
+     * Expects an argument that will be used to consume and also work on the
+     * passed arguments during invocation. This can be used to simulate values
+     * inner loop value passing.
+     *
+     * @param <T>
+     *            type of the method argument to consume
+     * @param consumer
+     *            Consumer for the passed argument
+     * @return {@code null}
+     */
+    public static <T> T delegateTo(Consumer<T> consumer) {
+        reportMatcher(new DelegateTo<>(consumer));
+        return null;
     }
 
     /**
